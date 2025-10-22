@@ -1,5 +1,6 @@
 import db from "#db/client";
 import { createEmployee } from "./queries/employees.js";
+
 await db.connect();
 await seedEmployees();
 await db.end();
@@ -50,6 +51,7 @@ async function seedEmployees() {
     {
       name: "Ivan Drago",
       birthday: "1980-06-18",
+      salary: 48000,
     },
   ];
 
