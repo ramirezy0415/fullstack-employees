@@ -1,5 +1,6 @@
 import db from "#db/client";
 import { createEmployee } from "./queries/employees.js";
+
 await db.connect();
 await seedEmployees();
 await db.end();

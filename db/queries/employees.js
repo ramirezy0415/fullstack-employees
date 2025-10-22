@@ -22,6 +22,14 @@ export async function createEmployee({ name, birthday, salary }) {
 /** @returns all employees */
 export async function getEmployees() {
   // TODO
+  try {
+    const query = `SELECT * FROM employees`;
+    const { rows } = await db.query(query);
+    return rows;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 /**
@@ -30,6 +38,15 @@ export async function getEmployees() {
  */
 export async function getEmployee(id) {
   // TODO
+  try {
+    const query = `SELECT * FROM employees WHERE id = $1`;
+    const values = [id];
+    const { rows } = await db.query(query, values);
+    return rows;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 /**
@@ -38,6 +55,18 @@ export async function getEmployee(id) {
  */
 export async function updateEmployee({ id, name, birthday, salary }) {
   // TODO
+  try {
+    const query = `
+      UPDATE employees
+      SET name = $2, birthday = $3, salary = $4
+      WHERE id = $1;`;
+    const values = [id, name, birthday, salary];
+    const { rows } = db.query(query, values);
+    return rows;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 /**
