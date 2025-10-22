@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS employees;
 
 CREATE TABLE employees (
     id serial PRIMARY KEY,
-    name text,
-    birthday date,
-    salary integer
+    name TEXT NOT NULL,
+    birthday DATE NOT NULL,
+    salary INTEGER NOT NULL
 );

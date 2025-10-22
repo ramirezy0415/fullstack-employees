@@ -51,6 +51,7 @@ async function seedEmployees() {
     {
       name: "Ivan Drago",
       birthday: "1980-06-18",
+      salary: 48000,
     },
   ];
 
