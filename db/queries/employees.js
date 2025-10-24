@@ -60,6 +60,11 @@ export async function updateEmployee({ id, name, birthday, salary }) {
       RETURNING *;`;
     const values = [name, birthday, salary, id];
     const { rows } = await db.query(query, values);
+
+    if (rows.length === 0) {
+      throw new Error("No employees to update.");
+    }
+
     return rows;
   } catch (error) {
     console.error(error);
@@ -80,6 +85,11 @@ export async function deleteEmployee(id) {
     `;
     const values = [id];
     const { rows } = await db.query(query, values);
+
+    if (rows.length === 0) {
+      throw new Error("No employees to delete.");
+    }
+
     return rows;
   } catch (error) {
     console.error(error);

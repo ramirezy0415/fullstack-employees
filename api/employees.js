@@ -11,23 +11,49 @@ import {
 } from "../db/queries/employees.js";
 
 router.route("/").get(async (req, res) => {
-  console.log("Get Employees");
-  const employees = await getEmployees();
-  res.send(employees);
+  try {
+    console.log("Get Employees");
+    const employees = await getEmployees();
+
+    if (!employees) {
+      res.status(500).json({ error: "No employees in database." });
+    }
+
+    res.status(200).send(employees);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 router.route("/:id").get(async (req, res) => {
-  const { id } = req.params;
-  console.log("Get Employee with id: ", id);
-  const employee = await getEmployee(id);
-  res.send(employee);
+  try {
+    const { id } = req.params;
+    console.log("Get Employee with id: ", id);
+    const employee = await getEmployee(id);
+
+    if (!employee) {
+      res.status(404).json({ error: "Employee not found." });
+    }
+
+    res.status(200).json(employee);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 router.route("/").post(async (req, res) => {
-  const newEmployee = req.body;
-  console.log("Create Employee ", newEmployee);
-  const employee = await createEmployee(newEmployee);
-  res.send(employee);
+  try {
+    const newEmployee = req.body;
+    console.log("Create Employee ", newEmployee);
+    const employee = await createEmployee(newEmployee);
+    if (!employee) {
+      res.status(400).json({ error: "Bad Request" });
+    }
+
+    res.status(200).send(employee);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 router.route("/:id").put(async (req, res) => {
@@ -47,7 +73,6 @@ router.route("/:id").put(async (req, res) => {
     return res.status(200).json(updated);
   } catch (error) {
     console.error(error);
-    next(error);
   }
 });
 
@@ -57,7 +82,7 @@ router.route("/:id").delete(async (req, res) => {
     console.log("Deleting user with id: ", id);
     const deleted = await deleteEmployee(id);
     if (!deleted) {
-      res.status(500).json({ error: "Failed to delete user with id: ", id });
+      res.status(500).json({ error: `Failed to delete user with id: ${id}` });
     }
     return res.status(200).json(deleted);
   } catch (error) {
