@@ -21,7 +21,6 @@ export async function createEmployee({ name, birthday, salary }) {
 
 /** @returns all employees */
 export async function getEmployees() {
-  // TODO
   try {
     const query = `SELECT * FROM employees`;
     const { rows } = await db.query(query);
@@ -37,7 +36,6 @@ export async function getEmployees() {
  * @returns undefined if employee with the given id does not exist
  */
 export async function getEmployee(id) {
-  // TODO
   try {
     const query = `SELECT * FROM employees WHERE id = $1`;
     const values = [id];
@@ -54,7 +52,6 @@ export async function getEmployee(id) {
  * @returns undefined if employee with the given id does not exist
  */
 export async function updateEmployee({ id, name, birthday, salary }) {
-  // TODO
   try {
     const query = `
       UPDATE employees
@@ -75,13 +72,12 @@ export async function updateEmployee({ id, name, birthday, salary }) {
  * @returns undefined if employee with the given id does not exist
  */
 export async function deleteEmployee(id) {
-  // TODO
   try {
     const query = `
-  DELETE FROM employees
-  WHERE id = $1
-  RETURNING *;
-  `;
+      DELETE FROM employees
+      WHERE id = $1
+      RETURNING *;
+    `;
     const values = [id];
     const { rows } = await db.query(query, values);
     return rows;

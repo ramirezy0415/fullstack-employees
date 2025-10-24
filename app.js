@@ -42,7 +42,7 @@ app.route("/employees").post(async (req, res) => {
 app.route("/employees/:id").put(async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Updating id: ", id);
+    console.log("Updating user with id: ", id);
     const { name, birthday, salary } = req.body;
     if (!id || !name || !birthday || !salary) {
       return res.status(400).json({ error: "Bad Request" });
@@ -63,6 +63,7 @@ app.route("/employees/:id").put(async (req, res) => {
 app.route("/employees/:id").delete(async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("Deleting user with id: ", id);
     const deleted = await deleteEmployee(id);
     if (!deleted) {
       res.status(500).json({ error: "Failed to delete user with id: ", id });
