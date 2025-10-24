@@ -21,7 +21,6 @@ export async function createEmployee({ name, birthday, salary }) {
 
 /** @returns all employees */
 export async function getEmployees() {
-  // TODO
   try {
     const query = `SELECT * FROM employees`;
     const { rows } = await db.query(query);
@@ -37,7 +36,6 @@ export async function getEmployees() {
  * @returns undefined if employee with the given id does not exist
  */
 export async function getEmployee(id) {
-  // TODO
   try {
     const query = `SELECT * FROM employees WHERE id = $1`;
     const values = [id];
@@ -54,14 +52,19 @@ export async function getEmployee(id) {
  * @returns undefined if employee with the given id does not exist
  */
 export async function updateEmployee({ id, name, birthday, salary }) {
-  // TODO
   try {
     const query = `
       UPDATE employees
-      SET name = $2, birthday = $3, salary = $4
-      WHERE id = $1;`;
-    const values = [id, name, birthday, salary];
-    const { rows } = db.query(query, values);
+      SET name = $1, birthday = $2, salary = $3
+      WHERE id = $4
+      RETURNING *;`;
+    const values = [name, birthday, salary, id];
+    const { rows } = await db.query(query, values);
+
+    if (rows.length === 0) {
+      throw new Error("No employees to update.");
+    }
+
     return rows;
   } catch (error) {
     console.error(error);
@@ -74,5 +77,21 @@ export async function updateEmployee({ id, name, birthday, salary }) {
  * @returns undefined if employee with the given id does not exist
  */
 export async function deleteEmployee(id) {
-  // TODO
+  try {
+    const query = `
+      DELETE FROM employees
+      WHERE id = $1
+      RETURNING *;
+    `;
+    const values = [id];
+    const { rows } = await db.query(query, values);
+
+    if (rows.length === 0) {
+      throw new Error("No employees to delete.");
+    }
+
+    return rows;
+  } catch (error) {
+    console.error(error);
+  }
 }
