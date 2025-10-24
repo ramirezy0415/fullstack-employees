@@ -4,6 +4,7 @@ import {
   getEmployee,
   createEmployee,
   updateEmployee,
+  deleteEmployee,
 } from "./db/queries/employees.js";
 const app = express();
 export default app;
@@ -56,5 +57,18 @@ app.route("/employees/:id").put(async (req, res) => {
   } catch (error) {
     console.error(error);
     next(error);
+  }
+});
+
+app.route("/employees/:id").delete(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await deleteEmployee(id);
+    if (!deleted) {
+      res.status(500).json({ error: "Failed to delete user with id: ", id });
+    }
+    return res.status(200).json(deleted);
+  } catch (error) {
+    console.error(error);
   }
 });

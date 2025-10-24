@@ -76,4 +76,16 @@ export async function updateEmployee({ id, name, birthday, salary }) {
  */
 export async function deleteEmployee(id) {
   // TODO
+  try {
+    const query = `
+  DELETE FROM employees
+  WHERE id = $1
+  RETURNING *;
+  `;
+    const values = [id];
+    const { rows } = await db.query(query, values);
+    return rows;
+  } catch (error) {
+    console.error(error);
+  }
 }
