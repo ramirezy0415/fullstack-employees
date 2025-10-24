@@ -3,12 +3,14 @@ import {
   getEmployees,
   getEmployee,
   createEmployee,
+  updateEmployee,
 } from "./db/queries/employees.js";
 const app = express();
 export default app;
 
 // TODO: this file!
 
+// Middleware to parse test
 app.use(express.json());
 
 app.route("/").get((req, res) => {
@@ -34,4 +36,25 @@ app.route("/employees").post(async (req, res) => {
   console.log("Create Employee ", newEmployee);
   const employee = await createEmployee(newEmployee);
   res.send(employee);
+});
+
+app.route("/employees/:id").put(async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("Updating id: ", id);
+    const { name, birthday, salary } = req.body;
+    if (!id || !name || !birthday || !salary) {
+      return res.status(400).json({ error: "Bad Request" });
+    }
+
+    const updated = await updateEmployee({ id, name, birthday, salary });
+    console.log(updated);
+    if (!updated) {
+      return res.status(404).json({ error: "Movie not found" });
+    }
+    return res.status(200).json(updated);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });

@@ -58,10 +58,11 @@ export async function updateEmployee({ id, name, birthday, salary }) {
   try {
     const query = `
       UPDATE employees
-      SET name = $2, birthday = $3, salary = $4
-      WHERE id = $1;`;
-    const values = [id, name, birthday, salary];
-    const { rows } = db.query(query, values);
+      SET name = $1, birthday = $2, salary = $3
+      WHERE id = $4
+      RETURNING *;`;
+    const values = [name, birthday, salary, id];
+    const { rows } = await db.query(query, values);
     return rows;
   } catch (error) {
     console.error(error);
